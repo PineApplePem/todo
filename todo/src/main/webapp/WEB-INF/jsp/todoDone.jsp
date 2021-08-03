@@ -11,11 +11,20 @@
 <body>
 <jsp:include page = "/WEB-INF/jsp/todo.jsp"/>
 <p><a href ="/todo/Todo">完了済みのTodoを閉じる</a></p>
+
+<% if(doneTodoList != null) { %>
  <% for(Todo todo : doneTodoList) { %>
     <p>
     <%= todo.getTodo() %><br>
-    締切：<%= todo.getDead() %><br>   
-    詳細：<%=todo.getDetail() %>
+    <% if(todo.getStart() != null) { %>
+    	取り掛かる日：<%= todo.getDead() %><br>
+    <% } %>
+    <% if(todo.getDead() != null) { %>
+    	締切：<%= todo.getDead() %><br>
+    <% } %>
+    <% if(todo.getDetail() != "") { %>	   
+    	詳細：<%=todo.getDetail() %>
+    <% } %>
     </p>
 	<form action ="/todo/ChangeServlet" method ="post" style="display:inline;">
 	<input type="hidden" name="id" value="done">
@@ -28,6 +37,7 @@
 	<input type="hidden" name="number" value=<%=todo.getNumber()%>>
 	<input type="submit" value="削除">
 	</form>
+  <% } %>
 <% } %>
 </body>
 </html>

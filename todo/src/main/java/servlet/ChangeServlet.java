@@ -28,18 +28,31 @@ public class ChangeServlet extends HttpServlet {
 	 	if (id.equals("newTodo")) {
 	 		NewTodoLogic newTodoLogic = new NewTodoLogic();
 	 		String todoContent = request.getParameter("todo");
+	 		String startString =request.getParameter("start");
 	 		String deadString = request. getParameter("dead");//後で使う
 	 		String detail =request.getParameter("detail");
-	 			
+	 		
+	 		//セッションスコープからUserIDを取得（今はダミーのIDを入れる）
+	 		String userId = "ccc";
+	 		
 	 		todo.setTodo(todoContent);
 	 		todo.setDetail(detail);
 	 			
-	 		//deadをDate型に変換して、TodoBeansに追加。
+	 		//deadとstartをDate型に変換して、TodoBeansに追加。
 	 		if(deadString != "") {	
 	 		Date deadDate = java.sql.Date.valueOf(deadString);
 	 		todo.setDead(deadDate);
 	 		}
+	 		
+	 		if(startString != "") {	
+	 		Date startDate = java.sql.Date.valueOf(startString);
+	 		todo.setStart(startDate);
+	 		}
+	 		
+	 		todo.setUserId(userId);
+	 		
 	 		newTodoLogic.execute(todo);	
+	 		
 	 		
 	 		
 	 	} else if(id.equals("delete")) {

@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -35,18 +36,30 @@ public class TodoServlet extends HttpServlet {
 		
 		//TODOリストを取得して、リクエストスコープに保存
 		GetTodoListLogic getTodoListLogic = new GetTodoListLogic();
-		List<Todo> todoList = getTodoListLogic.executeNotDone();
+		List<Todo> todoList = null;
+		
+		//セッションスコープからUserIDを取得（今はダミーのIDを取得)
+		String userId = "ccc";
+		
+		todoList = getTodoListLogic.executeNotDone(userId);
 		request.setAttribute("todoList",todoList);
+		
+		//STARTのデフォルト値として今日の日付をリクエストスコープに保存
+		long miliseconds = System.currentTimeMillis();
+		Date today = new Date(miliseconds);
+		request.setAttribute("today", today);
+		
 		
 		if (move == null) {
 			RequestDispatcher d = request.getRequestDispatcher("/WEB-INF/jsp/todoNotDone.jsp");
 			d.forward(request, response);
 		} else if(move.equals("done")) {
 			//完了済みのTodoリストを取得してリクエストスコープに保存
-			List<Todo> doneTodoList = getTodoListLogic.executeDone();
+			List<Todo> doneTodoList = getTodoListLogic.executeDone(userId);
 			request.setAttribute("doneTodoList",doneTodoList);
 			RequestDispatcher d = request.getRequestDispatcher("WEB-INF/jsp/todoDone.jsp");
 			d.forward(request, response);	
+				
 		}
 	}
 
