@@ -1,11 +1,16 @@
 package test;
 
 import java.sql.Date;
+import java.util.List;
 
+import dao.AdditionDAO;
 import dao.TodoDAO;
+import model.Addition;
 import model.Todo;
 
 public class TodoDAOCreateTest {
+	
+
 	
 	public static void main(String[] args) {
 		testCreate1(); //普通に
@@ -36,4 +41,5 @@ public class TodoDAOCreateTest {
 	boolean result = dao.create(todo);
 	System.out.println(result);
 	}
+	
 }

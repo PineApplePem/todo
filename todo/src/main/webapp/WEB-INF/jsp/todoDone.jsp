@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
  <%@ page import="model.Todo,java.util.List"%>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  <% List<Todo> doneTodoList = (List<Todo>)request.getAttribute("doneTodoList"); %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,6 +39,19 @@
 	<input type="hidden" name="number" value=<%=todo.getNumber()%>>
 	<input type="submit" value="削除">
 	</form>
+	
+	<a href ="/todo/Todo?viewAddition=${todo.number}">コメントを見る</a>
+				
+	<c:if test="${viewAddition == todo.number}">
+		<c:forEach var="addition" items="${additionList}">
+			<br>
+			<c:out value ="${addition.comment}" />
+			(<c:out value ="${addition.createTime}" />)
+			<a href ="/todo/AdditionDelete?delete=${addition.id}">削除</a><br>
+		</c:forEach>
+		<a href ="/todo/Todo">コメントを閉じる</a>
+	</c:if>
+	
   <% } %>
 <% } %>
 </body>

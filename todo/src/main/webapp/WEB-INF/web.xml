@@ -99,4 +99,14 @@
     <servlet-name>ReflectionDayCheckServlet</servlet-name>
     <url-pattern>/ReflectionDayCheckServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AdditionDelete</display-name>
+    <servlet-name>AdditionDelete</servlet-name>
+    <servlet-class>servlet.AdditionDelete</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdditionDelete</servlet-name>
+    <url-pattern>/AdditionDelete</url-pattern>
+  </servlet-mapping>
 </web-app>

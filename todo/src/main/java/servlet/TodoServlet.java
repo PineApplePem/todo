@@ -2,14 +2,18 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import dao.AdditionDAO;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Addition;
 import model.EditLogic;
 import model.GetTodoListLogic;
 import model.Todo;
@@ -36,6 +40,7 @@ public class TodoServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		String move = request.getParameter("move"); 
 		String edit = request.getParameter("edit"); 
+		String addition = request.getParameter("viewAddition");
 		
 		//TODOリストを取得して、リクエストスコープに保存
 		GetTodoListLogic getTodoListLogic = new GetTodoListLogic();
@@ -52,9 +57,33 @@ public class TodoServlet extends HttpServlet {
 		Date today = new Date(miliseconds);
 		request.setAttribute("today", today);
 		
+		//Deadが過ぎているTodoのNumberをリストアップする
+		if (todoList != null) {
+			List<Integer> overDeadList = new ArrayList();
+			LocalDate localDateDead; 
+			LocalDate localDateToday = today.toLocalDate();
+				for(Todo todo : todoList) {
+					if(todo.getDead() != null) {
+						localDateDead = todo.getDead().toLocalDate();
+						if(localDateDead.isBefore(localDateToday)) {
+							overDeadList.add(todo.getNumber());
+						}
+					}
+				request.setAttribute("overDeadList", overDeadList);
+			}
+		}		
+		 
 		//編集がリクエストされていたら編集画面へ移動できるよう準備
 		if(edit != null) {
 			request.setAttribute("edit",edit);
+		}
+		
+		//コメントの閲覧をリクエストされていたらコメント閲覧画面へ移動できるよう準備
+		if(addition != null) {
+			request.setAttribute("viewAddition",addition);
+			model.FindAdditionLogic logic = new model.FindAdditionLogic();
+			List<Addition> additionList = logic.execute(Integer.parseInt(addition));
+			request.setAttribute("additionList",additionList);
 		}
 		
 		if (move == null) {
@@ -79,6 +108,9 @@ public class TodoServlet extends HttpServlet {
 		
 		request.setCharacterEncoding("UTF-8");
 		
+		//ユーザー情報を取得
+		String userId ="ccc";
+		
 		//newTodoに関する値を取得
 		String todo = request.getParameter("todo");
 		String deadString = request.getParameter("dead");
@@ -87,6 +119,7 @@ public class TodoServlet extends HttpServlet {
 		
 		//oldTodoに関する値を取得
 		String oldTodoTodo = request.getParameter("oldTodo");
+		
 		String oldDeadString =  request.getParameter("oldDead");
 		Date oldDead = null;
 		if(oldDeadString != null) {
@@ -111,26 +144,22 @@ public class TodoServlet extends HttpServlet {
 				newTodo.setTodo(oldTodoTodo);
 			}
 		//date型に変換
+		Date dead = oldDead;
  		if(deadString != null) {	
  			if(deadString != "") {
- 				Date dead = java.sql.Date.valueOf(deadString);
- 				newTodo.setDead(dead);
- 			} else {
- 				newTodo.setDead(oldDead);
+ 				dead = java.sql.Date.valueOf(deadString);
  			}
- 		} else {
- 			newTodo.setDead(oldDead);
-		}
+ 		}	
+ 		newTodo.setDead(dead);
+ 
+ 		Date start = oldStart;
  		if(startString != null) {	
  			if(startString != "" ) {
- 				Date start = java.sql.Date.valueOf(startString);
- 				newTodo.setStart(start);
- 			} else {
- 				newTodo.setStart(oldStart);
+ 				start = java.sql.Date.valueOf(startString);
  			}
- 		} else {
- 			newTodo.setStart(oldStart);
 		}
+ 		newTodo.setStart(start);
+ 		
  		if(detail != null) {
  				newTodo.setDetail(detail);
  			} else {
@@ -138,19 +167,41 @@ public class TodoServlet extends HttpServlet {
  		}
 		
  		Todo oldTodo = new Todo();
- 		oldTodo.setTodo(oldTodoTodo);
- 		oldTodo.setDead(oldDead);
- 		oldTodo.setStart(oldStart);
- 		oldTodo.setDetail(oldDetail);
  		oldTodo.setNumber(oldNumber);
  		
 		EditLogic editLogic = new EditLogic();
 		editLogic.execute(oldTodo, newTodo);
 		
+		
 		//コメントに関する値を取得
 		String comment = request.getParameter("comment");
-		String tag = request.getParameter("commentTag");
-		//DBに保存
+		String getType = request.getParameter("commentType");
+		String overDead = request.getParameter("overDead");
+		if(comment != null) {
+			if(comment != "") {
+				//DBに保存
+				Addition addition = new Addition();
+				addition.setComment(comment);
+				
+				String type= "その他";
+				if(overDead != null) {
+					type = "反省";
+				} else {
+					if(getType != null) {
+						if(getType != "") {
+							type = getType;
+						}
+					}		
+				}
+				
+				addition.setType(type);
+				addition.setTodoId(oldNumber);
+				addition.setUserId(userId);
+		
+				AdditionDAO dao = new AdditionDAO();
+				boolean result = dao.create(addition);
+			}
+		}
 		
 		response.sendRedirect("/todo/Todo");
 		
