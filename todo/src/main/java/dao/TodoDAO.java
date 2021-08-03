@@ -84,6 +84,31 @@ public boolean create(Todo todo) {
 	return true;
 }
 
+public boolean edit(Todo oldTodo,Todo newTodo) {
+	
+	//データベースへ接続
+	try(Connection conn = DriverManager.getConnection
+			(JDBC_URL,DB_USER,DB_PASS)){
+		
+		String sql ="UPDATE TODO SET TODO = ? , DEAD = ?, START = ?, DETAIL = ? WHERE NUMBER = ?";
+		PreparedStatement pStmt = conn.prepareStatement(sql);
+		pStmt.setString(1,newTodo.getTodo());
+		pStmt.setDate(2, newTodo.getDead());
+		pStmt.setDate(3, newTodo.getStart());
+		pStmt.setString(4,newTodo.getDetail());
+		pStmt.setInt(5,oldTodo.getNumber());
+		
+		//DELETE文を実行
+		int result = pStmt.executeUpdate();
+		if(result != 1) {
+			return false;
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+		return false;
+	}
+	return true;
+}
 
 
 public boolean delete(Todo todo) {

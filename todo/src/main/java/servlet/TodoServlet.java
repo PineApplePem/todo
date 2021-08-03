@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.EditLogic;
 import model.GetTodoListLogic;
 import model.Todo;
 
@@ -32,7 +33,9 @@ public class TodoServlet extends HttpServlet {
 	 */
 	protected void doGet(jakarta.servlet.http.HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("UTF-8");
 		String move = request.getParameter("move"); 
+		String edit = request.getParameter("edit"); 
 		
 		//TODOリストを取得して、リクエストスコープに保存
 		GetTodoListLogic getTodoListLogic = new GetTodoListLogic();
@@ -49,6 +52,10 @@ public class TodoServlet extends HttpServlet {
 		Date today = new Date(miliseconds);
 		request.setAttribute("today", today);
 		
+		//編集がリクエストされていたら編集画面へ移動できるよう準備
+		if(edit != null) {
+			request.setAttribute("edit",edit);
+		}
 		
 		if (move == null) {
 			RequestDispatcher d = request.getRequestDispatcher("/WEB-INF/jsp/todoNotDone.jsp");
@@ -68,6 +75,85 @@ public class TodoServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//todoの編集およびコメントの作成
+		
+		request.setCharacterEncoding("UTF-8");
+		
+		//newTodoに関する値を取得
+		String todo = request.getParameter("todo");
+		String deadString = request.getParameter("dead");
+		String startString = request.getParameter("start");
+		String detail = request.getParameter("deatail");
+		
+		//oldTodoに関する値を取得
+		String oldTodoTodo = request.getParameter("oldTodo");
+		String oldDeadString =  request.getParameter("oldDead");
+		Date oldDead = null;
+		if(oldDeadString != null) {
+			if(oldDeadString != "" ) {
+				oldDead = java.sql.Date.valueOf(oldDeadString);
+			} 
+		}
+		String oldStartString =  request.getParameter("oldStart");
+		Date oldStart = null;
+		if(oldStartString != null) {
+			if(oldStartString != "" ) {
+				oldStart = java.sql.Date.valueOf(oldStartString);
+			} 
+		}
+		String oldDetail = request.getParameter("oldDetail");
+		int oldNumber = Integer.parseInt(request.getParameter("oldNumber"));
+		
+		Todo newTodo = new Todo();
+		if(todo != null) {
+				newTodo.setTodo(todo);
+			}else {
+				newTodo.setTodo(oldTodoTodo);
+			}
+		//date型に変換
+ 		if(deadString != null) {	
+ 			if(deadString != "") {
+ 				Date dead = java.sql.Date.valueOf(deadString);
+ 				newTodo.setDead(dead);
+ 			} else {
+ 				newTodo.setDead(oldDead);
+ 			}
+ 		} else {
+ 			newTodo.setDead(oldDead);
+		}
+ 		if(startString != null) {	
+ 			if(startString != "" ) {
+ 				Date start = java.sql.Date.valueOf(startString);
+ 				newTodo.setStart(start);
+ 			} else {
+ 				newTodo.setStart(oldStart);
+ 			}
+ 		} else {
+ 			newTodo.setStart(oldStart);
+		}
+ 		if(detail != null) {
+ 				newTodo.setDetail(detail);
+ 			} else {
+ 				newTodo.setDetail(oldDetail);
+ 		}
+		
+ 		Todo oldTodo = new Todo();
+ 		oldTodo.setTodo(oldTodoTodo);
+ 		oldTodo.setDead(oldDead);
+ 		oldTodo.setStart(oldStart);
+ 		oldTodo.setDetail(oldDetail);
+ 		oldTodo.setNumber(oldNumber);
+ 		
+		EditLogic editLogic = new EditLogic();
+		editLogic.execute(oldTodo, newTodo);
+		
+		//コメントに関する値を取得
+		String comment = request.getParameter("comment");
+		String tag = request.getParameter("commentTag");
+		//DBに保存
+		
+		response.sendRedirect("/todo/Todo");
+		
 	}
 }
 
