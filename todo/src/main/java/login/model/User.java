@@ -1,6 +1,8 @@
 package login.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 	private String id;
 	/** パスワード 暗号化して使用する */
 	private byte[] pass;
