@@ -37,7 +37,7 @@
 				<input type="hidden" name="number" value="${todo.number}">
 				<input type="submit" value="削除">
 				</form>	
-				<a href ="/todo/Todo?edit=${todo.number}">編集</a>
+				<a href ="/todo/Todo?edit=${todo.number}">編集・コメントの作成</a>
 				<a href ="/todo/Todo?viewAddition=${todo.number}">コメントを見る</a><br>
 				
 				
