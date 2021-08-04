@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import login.model.User;
 import model.DeleteLogic;
 import model.DoneLogic;
 import model.NewTodoLogic;
@@ -33,7 +35,9 @@ public class ChangeServlet extends HttpServlet {
 	 		String detail =request.getParameter("detail");
 	 		
 	 		//セッションスコープからUserIDを取得（今はダミーのIDを入れる）
-	 		String userId = "ccc";
+			HttpSession session = request.getSession();
+			User user = (User)session.getAttribute("user");		
+			String userId = user.getId();
 	 		
 	 		todo.setTodo(todoContent);
 	 		todo.setDetail(detail);

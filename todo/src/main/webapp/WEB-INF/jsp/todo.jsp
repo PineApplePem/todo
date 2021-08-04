@@ -6,6 +6,7 @@
  <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
  <html>
  <body>
+ <jsp:include page = "/login/top.jsp"/>
 <c:set var="todoList" value="${todoList}"/>
 <c:set var="todoListLength" value ="${fn:length(todoList)}"/>
 <c:choose>

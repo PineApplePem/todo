@@ -13,10 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Addition;
 import model.EditLogic;
 import model.GetTodoListLogic;
 import model.Todo;
+import login.model.User;
 
 @WebServlet("/Todo")
 /**
@@ -46,8 +48,10 @@ public class TodoServlet extends HttpServlet {
 		GetTodoListLogic getTodoListLogic = new GetTodoListLogic();
 		List<Todo> todoList = null;
 		
-		//セッションスコープからUserIDを取得（今はダミーのIDを取得)
-		String userId = "ccc";
+		//セッションスコープからUserIDを取得
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");		
+		String userId = user.getId();
 		
 		todoList = getTodoListLogic.executeNotDone(userId);
 		request.setAttribute("todoList",todoList);
@@ -109,7 +113,9 @@ public class TodoServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		
 		//ユーザー情報を取得
-		String userId ="ccc";
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");		
+		String userId = user.getId();
 		
 		//newTodoに関する値を取得
 		String todo = request.getParameter("todo");
