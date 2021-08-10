@@ -18,7 +18,7 @@
 		<c:choose>			
 			<c:when test = "${edit != todo.number}">
 			
-    			<p class = todo>
+    			<p id = todo>
     			<c:out value ="${todo.todo}" /><br>
     			</p>
     			<p class = date>
@@ -49,8 +49,36 @@
 				</form>	
 				<a href ="/todo/Todo?edit=${todo.number}">編集</a>
 				<a href ="/todo/Todo?viewAddition=${todo.number}">コメントを見る</a><br>
-					
-
+			
+	</div>		
+			<div class = comment>	
+				<c:if test="${viewAddition == todo.number}">
+					<c:forEach var="addition" items="${additionList}">
+						<br>
+						<c:out value ="${addition.type}"/>：
+						<c:out value ="${addition.comment}" />
+						<fmt:formatDate value="${addition.createTime}" pattern="yyyy/MM/dd HH:mm:ss" />
+						
+						<a href ="/todo/AdditionDelete?delete=${addition.id}">削除</a><br>
+					</c:forEach>
+					<div class = white>
+					新しいコメント：<br>
+					<form action ="/todo/Todo" method="post">
+					<select name ="commentType">
+					<option value ="その他">その他</option>
+					<option value ="進捗">進捗</option>
+					<option value ="反省">反省</option>
+					<option value ="気づいたこと">気づいたこと</option>
+					</select>
+					<textarea name="comment" placeholder="コメント" class="normal-textarea"></textarea>
+					<input type ="hidden" name ="onlyComment" value="onlyComment">
+					<input type ="hidden" name ="oldNumber" value="${todo.number}">
+					<input type ="submit" value="保存"><br>
+					</form>
+					<a href ="/todo/Todo">コメントを閉じる</a><br>
+					</div>
+				</c:if>
+				</div>
 			
 
 				<c:forEach var="todoNumber" items="${overDeadList}">	
@@ -122,41 +150,6 @@ Todoがありません。
 <input type ="hidden" name ="id" value="newTodo">
 <input type ="submit" value="保存">
 </form>
-</div>
-
-
-
-<c:forEach var="todo" items="${todoList}">
-	<div class = comment>	
-		<c:if test="${viewAddition == todo.number}">
-			<c:forEach var="addition" items="${additionList}">
-			<br>
-				<c:out value ="${addition.type}"/>：
-				<c:out value ="${addition.comment}" />
-				<fmt:formatDate value="${addition.createTime}" pattern="yyyy/MM/dd HH:mm:ss" />
-						
-				<a href ="/todo/AdditionDelete?delete=${addition.id}">削除</a><br>
-			</c:forEach>
-				<div class = white>
-				新しいコメント：<br>
-				<form action ="/todo/Todo" method="post">
-				<select name ="commentType">
-				<option value ="その他">その他</option>
-				<option value ="進捗">進捗</option>
-				<option value ="反省">反省</option>
-				<option value ="気づいたこと">気づいたこと</option>
-				</select>
-				<textarea name="comment" placeholder="コメント" class="normal-textarea"></textarea>
-				<input type ="hidden" name ="onlyComment" value="onlyComment">
-				<input type ="hidden" name ="oldNumber" value="${todo.number}">
-				<input type ="submit" value="保存"><br>
-				</form>
-				<a href ="/todo/Todo">コメントを閉じる</a><br>
-				</div>
-		</c:if>
-	</div>	
-</c:forEach>				
-
 
 </body>
 </html>

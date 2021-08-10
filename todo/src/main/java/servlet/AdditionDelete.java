@@ -35,9 +35,14 @@ public class AdditionDelete extends HttpServlet {
 	 	int id = Integer.parseInt(request.getParameter("delete"));
 	 	addition.setId(id);
 	 	AdditionDelelteLogic logic = new AdditionDelelteLogic();
-	 	logic.execute(addition);
-	 	
+	 	boolean result = logic.execute(addition);
+	 		if(result == true) {
 	 	response.sendRedirect("/todo/Todo");
+	 	} else {
+			request.setAttribute("errorMsg","エラーが発生しました。コメントの削除ができませんでした。");
+			RequestDispatcher d = request.getRequestDispatcher("WEB-INF/jsp/error.jsp");
+			d.forward(request, response);	
+	 	}
 	}
 
 	/**

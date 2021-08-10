@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.sql.Date;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +28,8 @@ public class ChangeServlet extends HttpServlet {
 	 	request.setCharacterEncoding("UTF-8");
 	 	Todo todo = new Todo();
 	 	String id = request.getParameter("id"); 
+	 	boolean result = false;
+	 	
 	 	if (id.equals("newTodo")) {
 	 		NewTodoLogic newTodoLogic = new NewTodoLogic();
 	 		String todoContent = request.getParameter("todo");
@@ -55,7 +58,7 @@ public class ChangeServlet extends HttpServlet {
 	 		
 	 		todo.setUserId(userId);
 	 		
-	 		newTodoLogic.execute(todo);	
+	 		result = newTodoLogic.execute(todo);	
 	 		
 	 		
 	 		
@@ -63,7 +66,7 @@ public class ChangeServlet extends HttpServlet {
 	 		DeleteLogic deleteLogic = new DeleteLogic();
 	 		int number = Integer.parseInt(request.getParameter("number"));
 	 		todo.setNumber(number);
-	 		deleteLogic.execute(todo);
+	 		result = deleteLogic.execute(todo);
 	 	}
 	 	
 	 	
@@ -73,10 +76,17 @@ public class ChangeServlet extends HttpServlet {
 	 		boolean done = Boolean.parseBoolean(request.getParameter("done"));
 	 		todo.setNumber(number);
 	 		todo.setDone(done);
-	 		doneLogic.execute(todo);
+	 		result = doneLogic.execute(todo);
 	 		} 
-	 	response.sendRedirect("/todo/Todo");		
-	 }
+	 	
+	 	if(result == true) {
+	 		response.sendRedirect("/todo/Todo");
+	 	} else {
+			request.setAttribute("errorMsg","エラーが発生しました。");
+			RequestDispatcher d = request.getRequestDispatcher("WEB-INF/jsp/error.jsp");
+			d.forward(request, response);	
+	 	}
+	 } 
 		
 }
 

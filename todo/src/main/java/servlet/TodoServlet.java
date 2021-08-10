@@ -117,67 +117,75 @@ public class TodoServlet extends HttpServlet {
 		User user = (User)session.getAttribute("user");		
 		String userId = user.getId();
 		
-		//newTodoに関する値を取得
-		String todo = request.getParameter("todo");
-		String deadString = request.getParameter("dead");
-		String startString = request.getParameter("start");
-		String detail = request.getParameter("deatail");
+		//コメントのみか、todoも送られてるかの確認
+		String onlyComment = request.getParameter("onlyComment");
 		
-		//oldTodoに関する値を取得
-		String oldTodoTodo = request.getParameter("oldTodo");
-		
-		String oldDeadString =  request.getParameter("oldDead");
-		Date oldDead = null;
-		if(oldDeadString != null) {
-			if(oldDeadString != "" ) {
-				oldDead = java.sql.Date.valueOf(oldDeadString);
-			} 
-		}
-		String oldStartString =  request.getParameter("oldStart");
-		Date oldStart = null;
-		if(oldStartString != null) {
-			if(oldStartString != "" ) {
-				oldStart = java.sql.Date.valueOf(oldStartString);
-			} 
-		}
-		String oldDetail = request.getParameter("oldDetail");
+		//コメント、Todoの両方で使う値を取得
 		int oldNumber = Integer.parseInt(request.getParameter("oldNumber"));
 		
-		Todo newTodo = new Todo();
-		if(todo != null) {
-				newTodo.setTodo(todo);
-			}else {
-				newTodo.setTodo(oldTodoTodo);
+		if(onlyComment == null) { 
+		
+			//newTodoに関する値を取得
+			String todo = request.getParameter("todo");
+			String deadString = request.getParameter("dead");
+			String startString = request.getParameter("start");
+			String detail = request.getParameter("detail");
+			
+			//oldTodoに関する値を取得
+			String oldTodoTodo = request.getParameter("oldTodo");
+			
+			String oldDeadString =  request.getParameter("oldDead");
+			Date oldDead = null;
+			if(oldDeadString != null) {
+				if(oldDeadString != "" ) {
+					oldDead = java.sql.Date.valueOf(oldDeadString);
+				} 
 			}
-		//date型に変換
-		Date dead = oldDead;
- 		if(deadString != null) {	
- 			if(deadString != "") {
- 				dead = java.sql.Date.valueOf(deadString);
- 			}
- 		}	
- 		newTodo.setDead(dead);
- 
- 		Date start = oldStart;
- 		if(startString != null) {	
- 			if(startString != "" ) {
- 				start = java.sql.Date.valueOf(startString);
- 			}
+			String oldStartString =  request.getParameter("oldStart");
+			Date oldStart = null;
+			if(oldStartString != null) {
+				if(oldStartString != "" ) {
+					oldStart = java.sql.Date.valueOf(oldStartString);
+				} 
+			}
+			String oldDetail = request.getParameter("oldDetail");
+			
+			
+			Todo newTodo = new Todo();
+			if(todo != null) {
+					newTodo.setTodo(todo);
+				}else {
+					newTodo.setTodo(oldTodoTodo);
+				}
+			//date型に変換
+			Date dead = oldDead;
+	 		if(deadString != null) {	
+	 			if(deadString != "") {
+	 				dead = java.sql.Date.valueOf(deadString);
+	 			}
+	 		}	
+	 		newTodo.setDead(dead);
+	 
+	 		Date start = oldStart;
+	 		if(startString != null) {	
+	 			if(startString != "" ) {
+	 				start = java.sql.Date.valueOf(startString);
+	 			}
+			}
+	 		newTodo.setStart(start);
+	 		
+	 		if(detail != null) {
+	 				newTodo.setDetail(detail);
+	 			} else {
+	 				newTodo.setDetail(oldDetail);
+	 		}
+			
+	 		Todo oldTodo = new Todo();
+	 		oldTodo.setNumber(oldNumber);
+	 		
+			EditLogic editLogic = new EditLogic();
+			editLogic.execute(oldTodo, newTodo);
 		}
- 		newTodo.setStart(start);
- 		
- 		if(detail != null) {
- 				newTodo.setDetail(detail);
- 			} else {
- 				newTodo.setDetail(oldDetail);
- 		}
-		
- 		Todo oldTodo = new Todo();
- 		oldTodo.setNumber(oldNumber);
- 		
-		EditLogic editLogic = new EditLogic();
-		editLogic.execute(oldTodo, newTodo);
-		
 		
 		//コメントに関する値を取得
 		String comment = request.getParameter("comment");
@@ -206,10 +214,20 @@ public class TodoServlet extends HttpServlet {
 		
 				AdditionDAO dao = new AdditionDAO();
 				boolean result = dao.create(addition);
+				if(result == false) {
+					request.setAttribute("errorMsg","エラーが発生しました。コメントの登録ができませんでした。");
+					RequestDispatcher d = request.getRequestDispatcher("WEB-INF/jsp/error.jsp");
+					d.forward(request, response);
+					return;
+				}
 			}
 		}
 		
-		response.sendRedirect("/todo/Todo");
+		if(onlyComment == null) {
+			response.sendRedirect("/todo/Todo");
+		} else {
+			response.sendRedirect("/todo/Todo?viewAddition=" + oldNumber);
+		}
 		
 	}
 }

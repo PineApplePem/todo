@@ -3,6 +3,7 @@
  <%@ page import="model.Todo,java.util.List"%>
   <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  <% List<Todo> doneTodoList = (List<Todo>)request.getAttribute("doneTodoList"); %>
+  <link rel="stylesheet" href="/todo/css/todo.css">
 
 <!DOCTYPE html>
 <html>
