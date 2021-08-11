@@ -47,6 +47,7 @@ public class TodoServlet extends HttpServlet {
 		//TODOリストを取得して、リクエストスコープに保存
 		GetTodoListLogic getTodoListLogic = new GetTodoListLogic();
 		List<Todo> todoList = null;
+		List<Todo> doneTodoList = null;
 		
 		//セッションスコープからUserIDを取得
 		HttpSession session = request.getSession();
@@ -55,6 +56,8 @@ public class TodoServlet extends HttpServlet {
 		
 		todoList = getTodoListLogic.executeNotDone(userId);
 		request.setAttribute("todoList",todoList);
+		doneTodoList = getTodoListLogic.executeDone(userId);
+		request.setAttribute("doneTodoList",doneTodoList);
 		
 		//STARTのデフォルト値として今日の日付をリクエストスコープに保存
 		long miliseconds = System.currentTimeMillis();
@@ -90,17 +93,14 @@ public class TodoServlet extends HttpServlet {
 			request.setAttribute("additionList",additionList);
 		}
 		
-		if (move == null) {
-			RequestDispatcher d = request.getRequestDispatcher("/WEB-INF/jsp/todoNotDone.jsp");
-			d.forward(request, response);
-		} else if(move.equals("done")) {
-			//完了済みのTodoリストを取得してリクエストスコープに保存
-			List<Todo> doneTodoList = getTodoListLogic.executeDone(userId);
-			request.setAttribute("doneTodoList",doneTodoList);
-			RequestDispatcher d = request.getRequestDispatcher("WEB-INF/jsp/todoDone.jsp");
-			d.forward(request, response);	
-				
+		
+		if(move != null) {
+			request.setAttribute("move",move);
 		}
+		
+		RequestDispatcher d = request.getRequestDispatcher("/WEB-INF/jsp/todo.jsp");
+		d.forward(request, response);
+		
 	}
 
 	/**
