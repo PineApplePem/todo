@@ -232,5 +232,51 @@ public List<Todo> findByReflection(String userId,int reflectionType,Date startDa
 	return todoList; 
 	}
 
+public boolean changeUser(String oldUserId,String newUserId) {
+	
+	//データベースへ接続
+	try(Connection conn = DriverManager.getConnection
+			(JDBC_URL,DB_USER,DB_PASS)){
+		
+		String sql ="UPDATE TODO SET USER_ID = ?  WHERE USER_ID = ?";
+		PreparedStatement pStmt = conn.prepareStatement(sql);
+		pStmt.setString(1,newUserId);
+		pStmt.setString(2, oldUserId);
+		
+		//DELETE文を実行
+		int result = pStmt.executeUpdate();
+		if(result != 1) {
+			return false;
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+		return false;
+	}
+	return true;
+}
+
+
+public boolean deleteUser(String userId) {
+	
+	//データベースへ接続
+	try(Connection conn = DriverManager.getConnection
+			(JDBC_URL,DB_USER,DB_PASS)){
+		
+		String sql ="DELETE FROM TODO WHERE USER_ID = ?";
+		PreparedStatement pStmt = conn.prepareStatement(sql);
+		pStmt.setString(1, userId);
+		
+		//DELETE文を実行
+		int result = pStmt.executeUpdate();
+		if(result != 1) {
+			return false;
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+		return false;
+	}
+	return true;
+}	
+
 
 }

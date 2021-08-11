@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import login.model.ChangeLogic;
 import login.model.User;
+import model.AdditionUserChangeLogic;
+import model.TodoUserChangeLogic;
 
 @WebServlet("/User/ChangeServlet")
 /**
@@ -64,6 +66,11 @@ public class ChangeServlet extends HttpServlet {
 		   
 		   
 		   		if(result == 1) {  //ユーザー情報の変更に成功した場合
+		   			//Todo、Additionのユーザーの変更
+		   			TodoUserChangeLogic todoLogic = new TodoUserChangeLogic();
+		   			todoLogic.execute(currentUser.getId(),newUser.getId());
+		   			AdditionUserChangeLogic additionLogic = new AdditionUserChangeLogic();
+		   			additionLogic.execute(currentUser.getId(),newUser.getId());
 		   			//セッションスコープに新しいユーザー情報を入れる
 		   			session.setAttribute("user", newUser);
 		   			//リダイレクト

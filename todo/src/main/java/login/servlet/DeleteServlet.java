@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import login.model.DeleteLogic;
 import login.model.User;
+import model.AdditionDeleteByUserLogic;
+import model.TodoDeleteByUserLogic;
 @WebServlet("/User/DeleteServlet")
 /**
  * Servlet implementation class DeleteServlet
@@ -46,17 +48,25 @@ public class DeleteServlet extends HttpServlet {
 			
 			//DBから削除
 			DeleteLogic deleteLogic = new DeleteLogic();
-			deleteLogic.execute(user.getId());
+			boolean idResult = deleteLogic.execute(user.getId());
+			
+			//TodoとAdditionの削除
+			TodoDeleteByUserLogic todoLogic = new TodoDeleteByUserLogic();
+			boolean todoResult =todoLogic.execute(user.getId());
+			
+			AdditionDeleteByUserLogic AdditionLogic = new AdditionDeleteByUserLogic();
+			boolean additionResult =AdditionLogic.execute(user.getId());
 			
 			//セッションスコープから削除
 			session.invalidate();
+			response.sendRedirect("/todo/Login");
 			
-			response.sendRedirect("/login/Login");
 		} else {
-			request.setAttribute("deleteErrorMsg","アカウントが削除できませんでした");
-			//フォワード
-			 RequestDispatcher d = request.getRequestDispatcher("/WEB-INF/loginJsp/change.jsp");
-			 d.forward(request,response);
+		
+		request.setAttribute("deleteErrorMsg","アカウントが削除できませんでした");
+		//フォワード
+		 RequestDispatcher d = request.getRequestDispatcher("/WEB-INF/loginJsp/change.jsp");
+		 d.forward(request,response);
 		}
 	}
 
