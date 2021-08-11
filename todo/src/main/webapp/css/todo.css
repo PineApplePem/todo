@@ -4,19 +4,6 @@ body{
 	background-color: #f6f6f6;
 }
 
-
-@media(max-width: 600px){
-	h2{
-		font-size: 85%;
-		padding: 5% 0% 3% 0%;
-	}
-	
-	.user-info{
-		font-size: 80%;
-		margin: 5%;
-	}
-}
-
 header{
 	display:inline-block; 
 	width: 100%;
@@ -44,6 +31,20 @@ h2{
 	color: #000000;
 	background-color: #FFFFFF;
 }
+
+@media(max-width: 600px){
+	h2{
+		font-size: 65%;
+		padding: 5% 0% 3% 0%;
+	}
+	
+	.user-info{
+		font-size: 70%;
+		margin: 5%;
+	}
+		
+}
+
 
 .white{
 	background-color: #ffffff;
