@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" id="WebApp_ID" version="2.5">
-  <display-name>todo</display-name>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" version="5.0">  
+<display-name>todo</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -8,7 +8,7 @@
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list>  
   <servlet>
     <description></description>
     <display-name>TodoServlet</display-name>
@@ -24,11 +24,11 @@
     <display-name>TodoChange</display-name>
     <servlet-name>TodoChange</servlet-name>
     <servlet-class>servlet.TodoChange</servlet-class>
-  </servlet>
+  </servlet>  
   <servlet-mapping>
     <servlet-name>TodoChange</servlet-name>
     <url-pattern>/TodoChange</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping>  
   <servlet>
     <description></description>
     <display-name>TodoChangeServlet</display-name>
@@ -49,57 +49,7 @@
     <servlet-name>ChangeServlet</servlet-name>
     <url-pattern>/ChangeServlet</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>testServlet</display-name>
-    <servlet-name>testServlet</servlet-name>
-    <servlet-class>test.testServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>testServlet</servlet-name>
-    <url-pattern>/testServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ReflectionServlet</display-name>
-    <servlet-name>ReflectionServlet</servlet-name>
-    <servlet-class>servlet.ReflectionServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ReflectionServlet</servlet-name>
-    <url-pattern>/ReflectionServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ReflectionChangeServlet</display-name>
-    <servlet-name>ReflectionChangeServlet</servlet-name>
-    <servlet-class>servlet.ReflectionChangeServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ReflectionChangeServlet</servlet-name>
-    <url-pattern>/ReflectionChangeServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ReflectionCreateServlet</display-name>
-    <servlet-name>ReflectionCreateServlet</servlet-name>
-    <servlet-class>servlet.ReflectionCreateServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ReflectionCreateServlet</servlet-name>
-    <url-pattern>/ReflectionCreateServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ReflectionDayCheckServlet</display-name>
-    <servlet-name>ReflectionDayCheckServlet</servlet-name>
-    <servlet-class>servlet.ReflectionDayCheckServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ReflectionDayCheckServlet</servlet-name>
-    <url-pattern>/ReflectionDayCheckServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
+ <servlet>
     <description></description>
     <display-name>AdditionDelete</display-name>
     <servlet-name>AdditionDelete</servlet-name>
@@ -109,4 +59,82 @@
     <servlet-name>AdditionDelete</servlet-name>
     <url-pattern>/AdditionDelete</url-pattern>
   </servlet-mapping>
-</web-app>
+    <servlet>
+    <description></description>
+    <display-name>LoginServlet</display-name>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>test.LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CreateServlet</display-name>
+    <servlet-name>CreateServlet</servlet-name>
+    <servlet-class>Servlet.CreateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateServlet</servlet-name>
+    <url-pattern>/CreateServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LogoutServlet</display-name>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>servlet.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/LogoutServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ChangeServlet</display-name>
+    <servlet-name>ChangeServlet</servlet-name>
+    <servlet-class>servlet.ChangeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChangeServlet</servlet-name>
+    <url-pattern>/ChangeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PassChangeServlet</display-name>
+    <servlet-name>PassChangeServlet</servlet-name>
+    <servlet-class>servlet.PassChangeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PassChangeServlet</servlet-name>
+    <url-pattern>/PassChangeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>passChangeServlet</display-name>
+    <servlet-name>passChangeServlet</servlet-name>
+    <servlet-class>servlet.passChangeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>passChangeServlet</servlet-name>
+    <url-pattern>/passChangeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteServlet</display-name>
+    <servlet-name>DeleteServlet</servlet-name>
+    <servlet-class>servlet.DeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteServlet</servlet-name>
+    <url-pattern>/DeleteServlet</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <display-name>LoginCheck</display-name>
+    <filter-name>LoginCheck</filter-name>
+    <filter-class>filter.LoginCheck</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LoginCheck</filter-name>
+    <url-pattern>/Login</url-pattern>
+  </filter-mapping> </web-app>
